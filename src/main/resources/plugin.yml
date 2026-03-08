@@ -1,0 +1,5 @@
+main: com.enargulus.movingblinds.MovingBlinds
+version: 1.0.0-SNAPSHOT
+name: MovingBlinds
+author: turbofandude
+api-version: 1.13
