@@ -150,9 +150,6 @@ public class PlayerListener implements Listener {
                 }
             }
 
-            plugin.getLogger()
-                    .info("Moving " + columnBlocks.size() + " blocks in column starting at " + banner.getLocation());
-
             for (Block block : columnBlocks) {
                 if (extending == true)
                     block.setBlockData(bannerData.clone(), true);
