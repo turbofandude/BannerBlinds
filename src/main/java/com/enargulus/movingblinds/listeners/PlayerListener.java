@@ -104,6 +104,7 @@ public class PlayerListener implements Listener {
         // Move banners
 
         for (Block banner : adjacentBanners) { // one per column
+            BlockData bannerData = banner.getBlockData().clone();
 
             ArrayList<Block> columnBlocks = new ArrayList<Block>();
             for (int dir = 0; dir < (extending == false ? 2 : 1); dir++) {
@@ -153,8 +154,8 @@ public class PlayerListener implements Listener {
                     .info("Moving " + columnBlocks.size() + " blocks in column starting at " + banner.getLocation());
 
             for (Block block : columnBlocks) {
-                if (extending == true)
-                    block.setType(banner.getType());
+                if (extending == true)                
+                    block.setBlockData(bannerData.clone(), true);               
                 else
                     block.setType(org.bukkit.Material.AIR);
             }
