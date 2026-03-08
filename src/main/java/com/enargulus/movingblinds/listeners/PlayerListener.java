@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
 public class PlayerListener implements Listener {
 
@@ -45,9 +46,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
-            return;
-        }
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getHand() != EquipmentSlot.HAND)
+            return; // ignore off-hand
 
         Block clickedBlock = event.getClickedBlock();
         if (clickedBlock == null || PlayerListener.IsBanner(clickedBlock) == false)
@@ -75,10 +75,10 @@ public class PlayerListener implements Listener {
 
             int limit = 100; // Limit to prevent infinite loops
             Block currentBlock = clickedBlock;
-            while (limit-- > 0 && currentBlock != null) {
+            while (limit-- > 0) {
                 Block newBlock = currentBlock.getRelative(face);
 
-                if (newBlock == null || !PlayerListener.IsBanner(newBlock) || adjacentBanners.contains(newBlock)) {
+                if (!PlayerListener.IsBanner(newBlock) || adjacentBanners.contains(newBlock)) {
                     break;
                 }
 
@@ -97,7 +97,9 @@ public class PlayerListener implements Listener {
         }
 
         // determine if we're moving down or up
-        boolean extending = event.getPlayer().isSneaking();
+        boolean extending = clickedBlock.getRelative(BlockFace.DOWN).getType() != clickedBlock.getType()
+                && clickedBlock.getRelative(BlockFace.UP).getType() != clickedBlock.getType();
+
         plugin.getLogger().info(
                 "Found " + adjacentBanners.size() + " adjacent banners to " + (extending ? "extend" : "retract") + ".");
 
@@ -112,25 +114,23 @@ public class PlayerListener implements Listener {
                 Block currentBlock = banner;
 
                 if (extending == true) {
-                    if (face == BlockFace.DOWN) {
-                        int limit = 100;
-                        Block nextBlock = currentBlock.getRelative(face);
+                    int limit = 100;
+                    Block nextBlock = currentBlock.getRelative(face);
 
-                        while (nextBlock != null && limit-- > 0 && (nextBlock.getType() == org.bukkit.Material.AIR
-                                || nextBlock.getType() == banner.getType())) {
-                            if (columnBlocks.contains(currentBlock) == false)
-                                columnBlocks.add(currentBlock);
+                    while (limit-- > 0 && (nextBlock.getType() == org.bukkit.Material.AIR
+                            || nextBlock.getType() == banner.getType())) {
+                        if (columnBlocks.contains(currentBlock) == false)
+                            columnBlocks.add(currentBlock);
 
-                            currentBlock = nextBlock;
-                            nextBlock = currentBlock.getRelative(face);
-                        }
+                        currentBlock = nextBlock;
+                        nextBlock = currentBlock.getRelative(face);
                     }
                 } else {
                     if (face == BlockFace.UP) {
                         int limit = 100;
                         Block nextBlock = currentBlock.getRelative(face);
 
-                        while (nextBlock != null && limit-- > 0 && nextBlock.getType() == banner.getType()) {
+                        while (limit-- > 0 && nextBlock.getType() == banner.getType()) {
                             if (columnBlocks.contains(currentBlock) == false)
                                 columnBlocks.add(currentBlock);
                             currentBlock = nextBlock;
@@ -138,9 +138,9 @@ public class PlayerListener implements Listener {
                         }
                     } else {
                         int limit = 100;
+                        currentBlock = currentBlock.getRelative(face);
 
-                        while (limit-- > 0 && currentBlock != null && currentBlock.getType() == banner.getType()) {
-
+                        while (limit-- > 0 && currentBlock.getType() == banner.getType()) {
                             if (columnBlocks.contains(currentBlock) == false)
                                 columnBlocks.add(currentBlock);
 
@@ -154,8 +154,8 @@ public class PlayerListener implements Listener {
                     .info("Moving " + columnBlocks.size() + " blocks in column starting at " + banner.getLocation());
 
             for (Block block : columnBlocks) {
-                if (extending == true)                
-                    block.setBlockData(bannerData.clone(), true);               
+                if (extending == true)
+                    block.setBlockData(bannerData.clone(), true);
                 else
                     block.setType(org.bukkit.Material.AIR);
             }
