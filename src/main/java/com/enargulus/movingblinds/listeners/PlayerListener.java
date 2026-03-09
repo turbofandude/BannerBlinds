@@ -26,15 +26,22 @@ public class PlayerListener implements Listener {
 
     private static boolean IsBanner(Block block) {
         switch (block.getType()) {
-            case RED_WALL_BANNER:
-            case BLUE_WALL_BANNER:
-            case GREEN_WALL_BANNER:
-            case YELLOW_WALL_BANNER:
-            case BLACK_WALL_BANNER:
             case WHITE_WALL_BANNER:
             case ORANGE_WALL_BANNER:
-            case PURPLE_WALL_BANNER:
+            case MAGENTA_WALL_BANNER:
+            case LIGHT_BLUE_WALL_BANNER:
+            case YELLOW_WALL_BANNER:
+            case LIME_WALL_BANNER:
+            case PINK_WALL_BANNER:
+            case GRAY_WALL_BANNER:
+            case LIGHT_GRAY_WALL_BANNER:
             case CYAN_WALL_BANNER:
+            case PURPLE_WALL_BANNER:
+            case BLUE_WALL_BANNER:
+            case BROWN_WALL_BANNER:
+            case GREEN_WALL_BANNER:
+            case RED_WALL_BANNER:
+            case BLACK_WALL_BANNER:
                 return true;
             default:
                 return false;
