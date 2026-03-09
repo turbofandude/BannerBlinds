@@ -39,6 +39,12 @@ public class PlayerListener implements Listener {
         }
     }
 
+    private static boolean IsBlockBehindValid(Block block) {
+        if(block == null || IsBanner(block) == true || block.getType().isSolid() == false)
+            return false;
+        return true;
+    }
+
     private static boolean FacingSameDirection(Block block1, Block block2) {
         BlockData blockData1 = block1.getBlockData();
         BlockData blockData2 = block2.getBlockData();
@@ -64,6 +70,14 @@ public class PlayerListener implements Listener {
         Block clickedBlock = event.getClickedBlock();
         if (clickedBlock == null || PlayerListener.IsBanner(clickedBlock) == false)
             return;
+
+        BlockData _blockData = clickedBlock.getBlockData();
+        BlockFace facing = null;
+
+        if (_blockData instanceof org.bukkit.block.data.Directional directionalData)
+            facing = directionalData.getFacing();
+        else
+            return;        
 
         ArrayList<Block> adjacentBanners = new ArrayList<Block>();
         adjacentBanners.add(clickedBlock);
@@ -124,7 +138,7 @@ public class PlayerListener implements Listener {
                     int limit = 100;
                     Block nextBlock = currentBlock.getRelative(face);
 
-                    while (limit-- > 0 && (nextBlock.getType() == org.bukkit.Material.AIR
+                    while (limit-- > 0 && IsBlockBehindValid(currentBlock.getRelative(facing.getOppositeFace())) && (nextBlock.getType() == org.bukkit.Material.AIR
                             || (nextBlock.getType() == banner.getType()) && PlayerListener.FacingSameDirection(banner, nextBlock) == true)) {
                         if (columnBlocks.contains(currentBlock) == false)
                             columnBlocks.add(currentBlock);
