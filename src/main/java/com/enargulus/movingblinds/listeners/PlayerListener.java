@@ -14,6 +14,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
+import org.bukkit.event.Event.Result;
+
 public class PlayerListener implements Listener {
 
     private final MovingBlinds plugin;
@@ -40,7 +42,7 @@ public class PlayerListener implements Listener {
     }
 
     private static boolean IsBlockBehindValid(Block block) {
-        if(block == null || IsBanner(block) == true || block.getType().isSolid() == false)
+        if (block == null || IsBanner(block) == true || block.getType().isSolid() == false)
             return false;
         return true;
     }
@@ -62,9 +64,9 @@ public class PlayerListener implements Listener {
         // Handle player join event
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getHand() != EquipmentSlot.HAND)
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getPlayer().isSneaking() == true)
             return; // ignore off-hand
 
         Block clickedBlock = event.getClickedBlock();
@@ -77,7 +79,13 @@ public class PlayerListener implements Listener {
         if (_blockData instanceof org.bukkit.block.data.Directional directionalData)
             facing = directionalData.getFacing();
         else
-            return;        
+            return;
+
+        event.setUseInteractedBlock(Result.ALLOW);
+        event.setUseItemInHand(Result.DENY);
+
+        if (event.getHand() != EquipmentSlot.HAND)
+            return;
 
         ArrayList<Block> adjacentBanners = new ArrayList<Block>();
         adjacentBanners.add(clickedBlock);
@@ -108,7 +116,7 @@ public class PlayerListener implements Listener {
                     break;
                 }
 
-                if(PlayerListener.FacingSameDirection(clickedBlock, newBlock) == false) {
+                if (PlayerListener.FacingSameDirection(clickedBlock, newBlock) == false) {
                     break;
                 }
 
@@ -138,8 +146,10 @@ public class PlayerListener implements Listener {
                     int limit = 100;
                     Block nextBlock = currentBlock.getRelative(face);
 
-                    while (limit-- > 0 && IsBlockBehindValid(currentBlock.getRelative(facing.getOppositeFace())) && (nextBlock.getType() == org.bukkit.Material.AIR
-                            || (nextBlock.getType() == banner.getType()) && PlayerListener.FacingSameDirection(banner, nextBlock) == true)) {
+                    while (limit-- > 0 && IsBlockBehindValid(currentBlock.getRelative(facing.getOppositeFace()))
+                            && (nextBlock.getType() == org.bukkit.Material.AIR
+                                    || (nextBlock.getType() == banner.getType())
+                                            && PlayerListener.FacingSameDirection(banner, nextBlock) == true)) {
                         if (columnBlocks.contains(currentBlock) == false)
                             columnBlocks.add(currentBlock);
 
@@ -151,7 +161,8 @@ public class PlayerListener implements Listener {
                         int limit = 100;
                         Block nextBlock = currentBlock.getRelative(face);
 
-                        while (limit-- > 0 && nextBlock.getType() == banner.getType() && PlayerListener.FacingSameDirection(banner, nextBlock) == true) {
+                        while (limit-- > 0 && nextBlock.getType() == banner.getType()
+                                && PlayerListener.FacingSameDirection(banner, nextBlock) == true) {
                             if (columnBlocks.contains(currentBlock) == false)
                                 columnBlocks.add(currentBlock);
                             currentBlock = nextBlock;
@@ -161,7 +172,8 @@ public class PlayerListener implements Listener {
                         int limit = 100;
                         currentBlock = currentBlock.getRelative(face);
 
-                        while (limit-- > 0 && currentBlock.getType() == banner.getType() && PlayerListener.FacingSameDirection(banner, currentBlock) == true) {
+                        while (limit-- > 0 && currentBlock.getType() == banner.getType()
+                                && PlayerListener.FacingSameDirection(banner, currentBlock) == true) {
                             if (columnBlocks.contains(currentBlock) == false)
                                 columnBlocks.add(currentBlock);
 
