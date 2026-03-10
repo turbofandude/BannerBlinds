@@ -206,12 +206,12 @@ public class PlayerListener implements Listener {
             }
         }
 
-        event.getPlayer().playSound(
-                clickedBlock.getLocation(),
-                extending ? Sound.BLOCK_WOOL_PLACE : Sound.BLOCK_WOOL_BREAK,
-                SoundCategory.BLOCKS,
-                1.0f, // volume
-                1.5f // pitch
+        clickedBlock.getWorld().playSound(
+            clickedBlock.getLocation(),
+            extending ? Sound.BLOCK_WOOL_PLACE : Sound.BLOCK_WOOL_BREAK,
+            SoundCategory.BLOCKS,
+            1.0f,
+            1.5f
         );
     }
 }
