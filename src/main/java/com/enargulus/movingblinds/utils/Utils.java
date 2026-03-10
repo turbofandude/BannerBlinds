@@ -1,4 +1,4 @@
-package com.enargulus.movingblinds.utils;
+package com.enargulus.bannerblinds.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

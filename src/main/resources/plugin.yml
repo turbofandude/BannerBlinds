@@ -1,5 +1,5 @@
-main: com.enargulus.movingblinds.MovingBlinds
-version: 1.0.1-SNAPSHOT
-name: MovingBlinds
+main: com.enargulus.bannerblinds.BannerBlinds
+version: 1.0.2
+name: BannerBlinds
 author: turbofandude
 api-version: 1.13

@@ -1,10 +1,10 @@
-package com.enargulus.movingblinds;
+package com.enargulus.bannerblinds;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import com.enargulus.movingblinds.managers.PluginManager;
-import com.enargulus.movingblinds.listeners.PlayerListener;
+import com.enargulus.bannerblinds.managers.PluginManager;
+import com.enargulus.bannerblinds.listeners.PlayerListener;
 
-public class MovingBlinds extends JavaPlugin {
+public class BannerBlinds extends JavaPlugin {
     
     @Override
     public void onEnable() {
@@ -15,12 +15,12 @@ public class MovingBlinds extends JavaPlugin {
         // Register listeners
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         
-        getLogger().info("MovingBlinds has been enabled!");
+        getLogger().info("BannerBlinds has been enabled!");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("MovingBlinds has been disabled!");
+        getLogger().info("BannerBlinds has been disabled!");
     }
     
 }

@@ -1,0 +1,5 @@
+com\enargulus\bannerblinds\BannerBlinds.class
+com\enargulus\bannerblinds\listeners\PlayerListener.class
+com\enargulus\bannerblinds\listeners\PlayerListener$1.class
+com\enargulus\bannerblinds\managers\PluginManager.class
+com\enargulus\bannerblinds\utils\Utils.class

@@ -1,6 +1,6 @@
-package com.enargulus.movingblinds.listeners;
+package com.enargulus.bannerblinds.listeners;
 
-import com.enargulus.movingblinds.MovingBlinds;
+import com.enargulus.bannerblinds.BannerBlinds;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.Listener;
 
@@ -20,9 +20,9 @@ import org.bukkit.event.Event.Result;
 
 public class PlayerListener implements Listener {
 
-    private final MovingBlinds plugin;
+    private final BannerBlinds plugin;
 
-    public PlayerListener(MovingBlinds plugin) {
+    public PlayerListener(BannerBlinds plugin) {
         this.plugin = plugin;
     }
 
@@ -82,7 +82,7 @@ public class PlayerListener implements Listener {
         if (clickedBlock == null || PlayerListener.IsBanner(clickedBlock) == false)
             return;
 
-        if (!event.getPlayer().hasPermission("movingblinds.use")) {
+        if (!event.getPlayer().hasPermission("bannerblinds.use")) {
             event.setCancelled(true);
             event.getPlayer().sendMessage("You don't have permission.");
             return;

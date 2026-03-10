@@ -1,4 +1,4 @@
-package com.enargulus.movingblinds.managers;
+package com.enargulus.bannerblinds.managers;
 
 public class PluginManager {
     private static PluginManager instance;
