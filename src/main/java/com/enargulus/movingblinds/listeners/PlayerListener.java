@@ -6,6 +6,8 @@ import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
@@ -79,6 +81,12 @@ public class PlayerListener implements Listener {
         Block clickedBlock = event.getClickedBlock();
         if (clickedBlock == null || PlayerListener.IsBanner(clickedBlock) == false)
             return;
+
+        if (!event.getPlayer().hasPermission("movingblinds.use")) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage("You don't have permission.");
+            return;
+        }
 
         BlockData _blockData = clickedBlock.getBlockData();
         BlockFace facing = null;
@@ -197,5 +205,13 @@ public class PlayerListener implements Listener {
                     block.setType(org.bukkit.Material.AIR);
             }
         }
+
+        event.getPlayer().playSound(
+                clickedBlock.getLocation(),
+                extending ? Sound.BLOCK_WOOL_PLACE : Sound.BLOCK_WOOL_BREAK,
+                SoundCategory.BLOCKS,
+                1.0f, // volume
+                1.5f // pitch
+        );
     }
 }
