@@ -82,12 +82,6 @@ public class PlayerListener implements Listener {
         if (clickedBlock == null || PlayerListener.IsBanner(clickedBlock) == false)
             return;
 
-        if (!event.getPlayer().hasPermission("bannerblinds.use")) {
-            event.setCancelled(true);
-            event.getPlayer().sendMessage("You don't have permission.");
-            return;
-        }
-
         BlockData _blockData = clickedBlock.getBlockData();
         BlockFace facing = null;
 
@@ -101,6 +95,12 @@ public class PlayerListener implements Listener {
 
         if (event.getHand() != EquipmentSlot.HAND)
             return;
+
+         if (!event.getPlayer().hasPermission("bannerblinds.use")) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage("You don't have permission.");
+            return;
+        }
 
         ArrayList<Block> adjacentBanners = new ArrayList<Block>();
         adjacentBanners.add(clickedBlock);
