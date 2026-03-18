@@ -12,6 +12,12 @@ public class BannerBlinds extends JavaPlugin {
         // Initialize managers
         PluginManager.getInstance().initialize();
         
+        getConfig().addDefault("usePermission", false);
+        getConfig().addDefault("maxWidth", 100);
+        getConfig().addDefault("maxHeight", 100);
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+
         // Register listeners
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         

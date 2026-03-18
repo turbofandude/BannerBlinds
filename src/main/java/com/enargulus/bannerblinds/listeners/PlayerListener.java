@@ -96,7 +96,7 @@ public class PlayerListener implements Listener {
         if (event.getHand() != EquipmentSlot.HAND)
             return;
 
-         if (!event.getPlayer().hasPermission("bannerblinds.use")) {
+         if (plugin.getConfig().getBoolean("usePermission") && !event.getPlayer().hasPermission("bannerblinds.use")) {
             event.setCancelled(true);
             event.getPlayer().sendMessage("You don't have permission.");
             return;
@@ -122,7 +122,7 @@ public class PlayerListener implements Listener {
                     break;
             }
 
-            int limit = 100; // Limit to prevent infinite loops
+            int limit = plugin.getConfig().getInt("maxWidth"); // Limit to prevent infinite loops
             Block currentBlock = clickedBlock;
             while (limit-- > 0) {
                 Block newBlock = currentBlock.getRelative(face);
@@ -144,10 +144,8 @@ public class PlayerListener implements Listener {
         boolean extending = clickedBlock.getRelative(BlockFace.DOWN).getType() != clickedBlock.getType()
                 && clickedBlock.getRelative(BlockFace.UP).getType() != clickedBlock.getType();
 
-        plugin.getLogger().info(
-                "Found " + adjacentBanners.size() + " adjacent banners to " + (extending ? "extend" : "retract") + ".");
-
         // Move banners
+        final int MAX_HEIGHT = plugin.getConfig().getInt("maxHeight");
 
         for (Block banner : adjacentBanners) { // one per column
             BlockData bannerData = banner.getBlockData().clone();
@@ -158,7 +156,7 @@ public class PlayerListener implements Listener {
                 Block currentBlock = banner;
 
                 if (extending == true) {
-                    int limit = 100;
+                    int limit = MAX_HEIGHT;
                     Block nextBlock = currentBlock.getRelative(face);
 
                     while (limit-- > 0 && IsBlockBehindValid(currentBlock.getRelative(facing.getOppositeFace()))
@@ -173,7 +171,7 @@ public class PlayerListener implements Listener {
                     }
                 } else {
                     if (face == BlockFace.UP) {
-                        int limit = 100;
+                        int limit = MAX_HEIGHT;
                         Block nextBlock = currentBlock.getRelative(face);
 
                         while (limit-- > 0 && nextBlock.getType() == banner.getType()
@@ -184,7 +182,7 @@ public class PlayerListener implements Listener {
                             nextBlock = currentBlock.getRelative(face);
                         }
                     } else {
-                        int limit = 100;
+                        int limit = MAX_HEIGHT;
                         currentBlock = currentBlock.getRelative(face);
 
                         while (limit-- > 0 && currentBlock.getType() == banner.getType()
